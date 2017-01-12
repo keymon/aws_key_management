@@ -8,7 +8,7 @@ for account in ci staging prod dev; do
 	echo "${AWS_ACCOUNT}"
 
 	eval $(pass work/gds/aws/gov-paas-${AWS_ACCOUNT}/credentials.sh)
-	. ~/.aws_sts_tokens/ci.sh
+	. ~/.aws_sts_tokens/${AWS_ACCOUNT}.sh
 	eval $(./rotate_my_access_keys.sh)
 
 	cat <<EOF | pass insert -m work/gds/aws/gov-paas-${AWS_ACCOUNT}/credentials.sh
@@ -21,5 +21,11 @@ export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}";
 EOF
 done
 
-
+for account in ci staging prod dev; do
+	echo $account
+	export AWS_ACCOUNT="${account}"
+	eval $(pass work/gds/aws/gov-paas-${AWS_ACCOUNT}/credentials.sh)
+	. ~/.aws_sts_tokens/${AWS_ACCOUNT}.sh
+	aws iam list-access-keys  --user-name ${AWS_USER_NAME} --query '[AccessKeyMetadata[].AccessKeyId,AccessKeyMetadata[].CreateDate]' --output text
+done
 
