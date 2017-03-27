@@ -46,6 +46,7 @@ user_name="${user_arn#*/}"
 arn_prefix="${user_arn%:*}"
 arn_prefix="${user_arn%:*}"
 account_id="${account_id:-$(echo "${user_arn}" | cut -f 5 -d :)}"
+expire_time="$(($(date '+%s')+3600))"
 
 read -p "Token code: " token
 
@@ -72,3 +73,4 @@ else
             awk '{ print "export AWS_ACCESS_KEY_ID=\"" $1 "\"\n" "export AWS_SECRET_ACCESS_KEY=\"" $2 "\"\n" "export AWS_SESSION_TOKEN=\"" $3 "\"" }'
     echo "export AWS_ROLE=${role_name}"
 fi
+echo "export AWS_SESSION_TOKEN_EXPIRE_DATE=${expire_time}"
