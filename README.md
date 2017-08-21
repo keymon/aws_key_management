@@ -42,3 +42,18 @@ AWS_CACHE_GPG_ID=2EA619ED \
 	~/workspace/aws_key_management/cached-sts-token.sh \
 	admin@keytwine -r admin -m
 ```
+
+Putting all together
+-------------------
+
+With these two scripts, and the [password-store](https://www.passwordstore.org/)
+it is easy to create a helper to load the credentials and assume roles:
+
+```
+eval $(pass keytwine/aws/hector.rivas+aws.admin_credentials.sh)
+AWS_CACHE_GPG_ID=2EA619ED
+	~/workspace/aws_key_management/cached-sts-token.sh \
+		admin@keytwine -r admin -m
+```
+
+See the `awssts.sh` for a example of an alias for `.bashrc`.
