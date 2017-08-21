@@ -8,9 +8,9 @@ Use them to assume roles with MFA, into different accounts, etc.
 `generate-sts-token.sh`
 -----------------------
 
-```
 Creates a new AWS STS token assuming the given role or user.
 
+```
 Usage:
 ./generate-sts-token.sh [-r <role name>] [-a account_id] [-m] [-d duration_in_seconds]
 
@@ -24,3 +24,21 @@ Options:
 ```
 
 Example: `./generate-sts-token.sh -r admin -m`
+
+`./cached-sts-token.sh `
+------------------------
+
+To be used in combination with the previous script, it will kept a
+encrypted cached session of the `generate-sts-token.sh`
+
+```
+Usage: ./cached-sts-token.sh <id> [generate-sts-token.sh args]
+```
+
+You can call it as:
+
+```
+AWS_CACHE_GPG_ID=2EA619ED \
+	~/workspace/aws_key_management/cached-sts-token.sh \
+	admin@keytwine -r admin -m
+```
