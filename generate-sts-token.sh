@@ -73,7 +73,7 @@ else
   echo "Creating new session token for role ${role_name}..." 1>&2
   aws sts assume-role \
     --role-arn "${role_arn}" \
-    --role-session-name "${user_name}@${account_id}/${role_name}" \
+    --role-session-name "${user_name%%[+@]*}+${role_name}@${account_id}" \
     --serial-number "${token_arn}" \
     --duration-seconds "${duration}" \
     --output text \
