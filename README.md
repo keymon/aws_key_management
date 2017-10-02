@@ -5,6 +5,30 @@ Set of bash scripts to generate and manage AWS STS tokens.
 
 Use them to assume roles with MFA, into different accounts, etc.
 
+Quick start
+-----------
+
+To start using this repo:
+
+ 1. Fork this repo.
+ 2. edit `awssts.sh` to change it to your own config.
+ 3. add base AWS credentials in pass, with this format:
+    ```
+export AWS_USER_NAME="user@company.com";
+export AWS_ACCOUNT_NAME="user+admin@user";
+export AWS_ACCESS_KEY_ID="...";
+export AWS_SECRET_ACCESS_KEY="...";
+export AWS_SESSION_TOKEN=
+```
+ 4. Source the `awssts.sh` in your `.profile`: `source ~/workspace/aws_key_management/awssts.sh`
+
+Now you can simply switch credentials like this:
+
+```
+awssts role:admin@keytwine-root
+awssts role:dev@keytwine-sandbox
+```
+
 `generate-sts-token.sh`
 -----------------------
 
@@ -43,8 +67,8 @@ AWS_CACHE_GPG_ID=2EA619ED \
 	admin@keytwine -r admin -m
 ```
 
-Putting all together
--------------------
+Putting all together: awssts.sh
+-------------------------------
 
 With these two scripts, and the [password-store](https://www.passwordstore.org/)
 it is easy to create a helper to load the credentials and assume roles:
@@ -56,4 +80,8 @@ AWS_CACHE_GPG_ID=2EA619ED
 		admin@keytwine -r admin -m
 ```
 
-See the `awssts.sh` for a example of an alias for `.bashrc`.
+Following this approach, there is an example script `awssts.sh` which
+can be sourced to provide the function `awssts` which would change the
+credentials of the current shell.
+
+Check the Quick Start guide above.

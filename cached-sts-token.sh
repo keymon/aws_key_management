@@ -3,6 +3,9 @@
 # Variables:
 #  - AWS_CACHE_GPG_ID to change the GPG key to use
 #  - STS_TOKEN_CACHE_DIR to change where the cached tokens are stored
+#  - ROOT_AWS_CREDENTIALS_COMMAND command to run to reset to the root
+#    credentials if the cached is expired (e.g. pass to get user creds,
+#    or federated login)
 #
 set -eu -o pipefail
 
@@ -17,7 +20,8 @@ if [ -z "${1:-}" ]; then
     exit 1
 fi
 
-STS_CACHE_ID_FILE="${STS_TOKEN_CACHE_DIR}/$1.sh.gpg"
+AWS_ACCOUNT_NAME="$1"
+STS_CACHE_ID_FILE="${STS_TOKEN_CACHE_DIR}/${AWS_ACCOUNT_NAME}.sh.gpg"
 shift
 
 decrypt_cached_file() {
@@ -33,6 +37,9 @@ cached_exists_and_not_expired() {
 }
 
 generate_sts_token() {
+    if [ "${ROOT_AWS_CREDENTIALS_COMMAND:-}" ]; then
+        eval $(eval "${ROOT_AWS_CREDENTIALS_COMMAND}")
+    fi
     mkdir -p "${STS_TOKEN_CACHE_DIR}"
     output="$("${SCRIPT_DIR}/generate-sts-token.sh" $@)"
     echo "${output}" | gpg -a -e --batch ${AWS_CACHE_GPG_ID:+-r ${AWS_CACHE_GPG_ID}} > "${STS_CACHE_ID_FILE}"
@@ -42,3 +49,4 @@ if ! cached_exists_and_not_expired; then
     generate_sts_token "$@"
 fi
 decrypt_cached_file
+echo "export AWS_ACCOUNT_NAME=${AWS_ACCOUNT_NAME}"
