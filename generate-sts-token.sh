@@ -74,11 +74,11 @@ else
   aws sts assume-role \
     --role-arn "${role_arn}" \
     --role-session-name "${user_name%%[+@]*}+${role_name}@${account_id}" \
-    --serial-number "${token_arn}" \
     --duration-seconds "${duration}" \
+    ${token:+--serial-number "${token_arn}" --token-code "${token}"}  \
     --output text \
     --query '[Credentials.AccessKeyId,Credentials.SecretAccessKey,Credentials.SessionToken]' \
-    ${token:+--token-code "${token}"} | \
+    | \
       awk '{ print "export AWS_ACCESS_KEY_ID=\"" $1 "\"\n" "export AWS_SECRET_ACCESS_KEY=\"" $2 "\"\n" "export AWS_SESSION_TOKEN=\"" $3 "\"" }'
   echo "export AWS_ROLE=${role_name}"
 fi
