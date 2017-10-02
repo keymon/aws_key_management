@@ -17,7 +17,8 @@ if [ -z "${1:-}" ]; then
     exit 1
 fi
 
-STS_CACHE_ID_FILE="${STS_TOKEN_CACHE_DIR}/$1.sh.gpg"
+AWS_ACCOUNT_NAME="$1"
+STS_CACHE_ID_FILE="${STS_TOKEN_CACHE_DIR}/${AWS_ACCOUNT_NAME}.sh.gpg"
 shift
 
 decrypt_cached_file() {
@@ -42,3 +43,4 @@ if ! cached_exists_and_not_expired; then
     generate_sts_token "$@"
 fi
 decrypt_cached_file
+echo "export AWS_ACCOUNT_NAME=${AWS_ACCOUNT_NAME}"
