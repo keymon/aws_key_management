@@ -13,13 +13,13 @@ To start using this repo:
  1. Fork this repo.
  2. edit `awssts.sh` to change it to your own config.
  3. add base AWS credentials in pass, with this format:
-    ```
-export AWS_USER_NAME="user@company.com";
-export AWS_ACCOUNT_NAME="user+admin@user";
-export AWS_ACCESS_KEY_ID="...";
-export AWS_SECRET_ACCESS_KEY="...";
-export AWS_SESSION_TOKEN=
-```
+ 
+        export AWS_USER_NAME="user@company.com";
+        export AWS_ACCOUNT_NAME="user+admin@user";
+        export AWS_ACCESS_KEY_ID="...";
+        export AWS_SECRET_ACCESS_KEY="...";
+        export AWS_SESSION_TOKEN=
+
  4. Source the `awssts.sh` in your `.profile`: `source ~/workspace/aws_key_management/awssts.sh`
 
 Now you can simply switch credentials like this:
