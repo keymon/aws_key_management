@@ -4,7 +4,7 @@ set -eu -o pipefail
 
 SCRIPT_NAME="$0"
 
-duration=3600
+duration=36000
 use_mfa=
 
 usage() {
