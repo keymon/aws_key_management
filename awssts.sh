@@ -57,12 +57,48 @@ case "$aws_account_name" in
       ${_awssts_dir}/cached-sts-token.sh \
       ${aws_account_name} -a "${account_id}" -r dev -m
     ;;
+  user:hectorrivasgandara@gov-paas-dev)
+    pass work/gds/aws/gov-paas-dev/credentials.sh
+    ;;
+  sts:hectorrivasgandara@gov-paas-dev)
+    ROOT_AWS_CREDENTIALS_COMMAND="${_awssts_script} user:hectorrivasgandara@gov-paas-dev" \
+    AWS_CACHE_GPG_ID="${_aws_cache_gpg_id}" \
+      ${_awssts_dir}/cached-sts-token.sh \
+      ${aws_account_name} -m
+    ;;
+  user:hectorrivasgandara@gov-paas-ci)
+    pass work/gds/aws/gov-paas-ci/credentials.sh
+    ;;
+  sts:hectorrivasgandara@gov-paas-ci)
+    ROOT_AWS_CREDENTIALS_COMMAND="${_awssts_script} user:hectorrivasgandara@gov-paas-ci" \
+    AWS_CACHE_GPG_ID="${_aws_cache_gpg_id}" \
+      ${_awssts_dir}/cached-sts-token.sh \
+      ${aws_account_name} -m
+    ;;
+  user:hectorrivasgandara@gov-paas-staging)
+    pass work/gds/aws/gov-paas-staging/credentials.sh
+    ;;
+  sts:hectorrivasgandara@gov-paas-staging)
+    ROOT_AWS_CREDENTIALS_COMMAND="${_awssts_script} user:hectorrivasgandara@gov-paas-staging" \
+    AWS_CACHE_GPG_ID="${_aws_cache_gpg_id}" \
+      ${_awssts_dir}/cached-sts-token.sh \
+      ${aws_account_name} -m
+    ;;
+  user:hectorrivasgandara@gov-paas-prod)
+    pass work/gds/aws/gov-paas-prod/credentials.sh
+    ;;
+  sts:hectorrivasgandara@gov-paas-prod)
+    ROOT_AWS_CREDENTIALS_COMMAND="${_awssts_script} user:hectorrivasgandara@gov-paas-prod" \
+    AWS_CACHE_GPG_ID="${_aws_cache_gpg_id}" \
+      ${_awssts_dir}/cached-sts-token.sh \
+      ${aws_account_name} -m
+    ;;
   *)
     (
       echo "Usage: awssts <aws_account_name>"
       echo
       echo "Available accounts:"
-      sed -n "s/^ *\(user:.*\))/  awssts \1/p;s/^ *\(role:.*\))/  awssts \1/p" < "${_awssts_script}" 1>&2
+      sed -n "s/^ *\(user:.*\))/  awssts \1/p;s/^ *\(sts:.*\))/  awssts \1/p;s/^ *\(role:.*\))/  awssts \1/p" < "${_awssts_script}" 1>&2
     ) 1>&2
     exit 1
     ;;
