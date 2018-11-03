@@ -93,6 +93,9 @@ case "$aws_account_name" in
       ${_awssts_dir}/cached-sts-token.sh \
       ${aws_account_name} -m
     ;;
+  user:hectorrivasgandara@gds-users)
+    pass work/gds/aws/gds-users/credentials.sh
+    ;;
   *)
     (
       echo "Usage: awssts <aws_account_name>"
